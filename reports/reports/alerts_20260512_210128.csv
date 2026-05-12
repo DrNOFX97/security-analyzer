@@ -1,0 +1,10 @@
+level,type,details,timestamp
+HIGH,Suspicious PowerShell Script,"{'timestamp': '2026-05-12 18:37:46', 'message': 'Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File audit_s'}",2026-05-12T21:01:28.898295
+HIGH,Suspicious PowerShell Script,"{'timestamp': '2026-05-11 23:27:47', 'message': 'Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File collect'}",2026-05-12T21:01:28.898367
+HIGH,Suspicious PowerShell Script,"{'timestamp': '2026-05-11 22:45:56', 'message': 'Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File simplif'}",2026-05-12T21:01:28.898380
+HIGH,Suspicious PowerShell Script,"{'timestamp': '2026-05-11 22:45:36', 'message': 'Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File revert_'}",2026-05-12T21:01:28.898383
+HIGH,Suspicious PowerShell Script,"{'timestamp': '2026-05-11 22:41:33', 'message': 'Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File organiz'}",2026-05-12T21:01:28.898391
+HIGH,Suspicious PowerShell Script,"{'timestamp': '2026-05-11 22:31:47', 'message': 'Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File run_ocr'}",2026-05-12T21:01:28.898415
+HIGH,Suspicious PowerShell Script,"{'timestamp': '2026-05-11 22:27:54', 'message': 'Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File rename_'}",2026-05-12T21:01:28.898426
+HIGH,Suspicious PowerShell Script,"{'timestamp': '2026-05-11 22:27:23', 'message': 'Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File parse_i'}",2026-05-12T21:01:28.898429
+HIGH,Suspicious PowerShell Script,"{'timestamp': '2026-05-11 22:19:14', 'message': 'Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File ""C:\\Use'}",2026-05-12T21:01:28.898436

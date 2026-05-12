@@ -1,0 +1,43 @@
+WINDOWS SECURITY LOG ANALYSIS REPORT
+======================================================================
+
+Generated: 2026-05-12T21:01:28.899184
+Total Events: 4140
+Alerts (CRITICAL/HIGH): 0/9
+
+HIGH: Suspicious PowerShell Script
+  timestamp: 2026-05-12 18:37:46
+  message: Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File audit_s
+
+HIGH: Suspicious PowerShell Script
+  timestamp: 2026-05-11 23:27:47
+  message: Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File collect
+
+HIGH: Suspicious PowerShell Script
+  timestamp: 2026-05-11 22:45:56
+  message: Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File simplif
+
+HIGH: Suspicious PowerShell Script
+  timestamp: 2026-05-11 22:45:36
+  message: Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File revert_
+
+HIGH: Suspicious PowerShell Script
+  timestamp: 2026-05-11 22:41:33
+  message: Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File organiz
+
+HIGH: Suspicious PowerShell Script
+  timestamp: 2026-05-11 22:31:47
+  message: Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File run_ocr
+
+HIGH: Suspicious PowerShell Script
+  timestamp: 2026-05-11 22:27:54
+  message: Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File rename_
+
+HIGH: Suspicious PowerShell Script
+  timestamp: 2026-05-11 22:27:23
+  message: Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File parse_i
+
+HIGH: Suspicious PowerShell Script
+  timestamp: 2026-05-11 22:19:14
+  message: Creating Scriptblock text (1 of 1):  powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\Use
+

@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --severity-critical: rgb(239, 68, 68);
+  --severity-high: rgb(249, 115, 22);
+  --severity-medium: rgb(234, 179, 8);
+  --severity-low: rgb(59, 130, 246);
+  --accent: rgb(34, 211, 238);
+}
+
+body {
+  @apply bg-gray-950 text-gray-100 font-sans;
+}
+
+/* Recharts customization */
+.recharts-wrapper {
+  @apply outline-none;
+}
+
+.recharts-text {
+  @apply text-gray-400;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  @apply stroke-gray-800;
+}
+
+.recharts-tooltip-wrapper {
+  @apply outline-none;
+}
+
+.recharts-default-tooltip {
+  @apply bg-gray-800 border border-gray-700 rounded-lg shadow-lg;
+}
+
+/* Animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

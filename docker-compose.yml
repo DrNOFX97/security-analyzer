@@ -1,0 +1,72 @@
+services:
+  wazuh-manager:
+    image: wazuh/wazuh-manager:latest
+    container_name: wazuh-manager
+    ports:
+      - "1514:1514"
+      - "1515:1515"
+      - "514:514/udp"
+      - "55000:55000"
+    environment:
+      - INDEXER_URL=https://wazuh-indexer:9200
+      - INDEXER_USERNAME=admin
+      - INDEXER_PASSWORD=SecretPassword
+      - FILEBEAT_SSL_VERIFICATION_MODE=full
+      - SSL_CERTIFICATE_AUTHORITIES=/etc/ssl/certs/ca-certificates.crt
+      - SSL_CERTIFICATE=/etc/ssl/certs/ssl-cert-snakeoil.pem
+      - SSL_KEY=/etc/ssl/private/ssl-cert-snakeoil.key
+    volumes:
+      - wazuh_etc:/var/ossec/etc
+      - wazuh_logs:/var/ossec/logs
+    networks:
+      - wazuh
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:55000/version"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  wazuh-indexer:
+    image: wazuh/wazuh-indexer:latest
+    container_name: wazuh-indexer
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - DISABLE_SECURITY_PLUGIN=true
+    volumes:
+      - indexer_data:/usr/share/opensearch/data
+    networks:
+      - wazuh
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s https://localhost:9200/_cluster/health | grep -q green || curl -s http://localhost:9200/_cluster/health | grep -q green"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  wazuh-dashboard:
+    image: wazuh/wazuh-dashboard:latest
+    container_name: wazuh-dashboard
+    ports:
+      - "443:5601"
+    environment:
+      - INDEXER_URL=https://wazuh-indexer:9200
+      - INDEXER_USERNAME=admin
+      - INDEXER_PASSWORD=SecretPassword
+      - WAZUH_URL=https://wazuh-manager:55000
+      - WAZUH_USERNAME=wazuh
+      - WAZUH_PASSWORD=wazuh
+    depends_on:
+      - wazuh-indexer
+      - wazuh-manager
+    networks:
+      - wazuh
+
+volumes:
+  wazuh_etc:
+  wazuh_logs:
+  indexer_data:
+
+networks:
+  wazuh:
+    driver: bridge

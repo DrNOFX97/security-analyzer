@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(docker --version)",
+      "PowerShell(docker search wazuh *)",
+      "Bash(git -C \"C:\\\\Users\\\\fnuno\\\\Documents\\\\security_analyzer\" log --oneline -10)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Get-WmiObject *)",
+      "PowerShell(curl *)",
+      "Bash(C:\\\\Users\\\\fnuno\\\\Documents\\\\security_analyzer\\\\run_admin.bat *)",
+      "PowerShell(C:\\\\Users\\\\fnuno\\\\Documents\\\\security_analyzer\\\\run_admin.bat)",
+      "PowerShell(Start-Process \"http://localhost:5173\")",
+      "PowerShell(Out-Null *)",
+      "PowerShell(Start-Process powershell -Verb RunAs -ArgumentList \"-NoExit -File 'C:\\\\Users\\\\fnuno\\\\Documents\\\\security_analyzer\\\\run_dashboard_admin.ps1'\")",
+      "PowerShell(Start-Process \"C:\\\\Users\\\\fnuno\\\\Documents\\\\security_analyzer\\\\start_backend_admin.bat\" -Verb RunAs)",
+      "Bash(python *)",
+      "Bash(npm run *)",
+      "Bash(curl *)",
+      "Bash(awk '{print $NF}')",
+      "Bash(ConvertTo-Json -Depth 10)",
+      "Bash(git init *)",
+      "Bash(git config *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'Integrate threat intelligence and event correlation pipeline with IOC extraction and threat scoring *)"
+    ]
+  }
+}
