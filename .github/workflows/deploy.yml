@@ -33,9 +33,13 @@ jobs:
         working-directory: frontend
         run: npm install
 
+      - name: Clean build cache
+        working-directory: frontend
+        run: rm -rf dist node_modules/.vite
+
       - name: Build
         working-directory: frontend
-        run: npm run build
+        run: npm run build 2>&1
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
