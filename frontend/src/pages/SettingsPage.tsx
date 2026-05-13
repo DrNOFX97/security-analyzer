@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Save } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Save, Wifi, WifiOff } from 'lucide-react';
 import { useSystemInfo } from '../hooks/useSystemInfo';
 import { Spinner } from '../components/shared/Spinner';
+import { wazuhAPI } from '../api/client';
 
 const SETTINGS_KEY = 'security_analyzer_settings';
 
@@ -31,9 +32,55 @@ export function SettingsPage() {
   const [settings, setSettings] = useState<AnalysisSettings>(loadAnalysisSettings);
   const [saved, setSaved] = useState(false);
 
+  // Wazuh API config
+  const [wazuhHost, setWazuhHost] = useState('localhost');
+  const [wazuhPort, setWazuhPort] = useState(55000);
+  const [wazuhUser, setWazuhUser] = useState('wazuh');
+  const [wazuhPass, setWazuhPass] = useState('');
+  const [wazuhSsl, setWazuhSsl] = useState(false);
+  const [wazuhStatus, setWazuhStatus] = useState<boolean | null>(null);
+  const [wazuhSaving, setWazuhSaving] = useState(false);
+  const [wazuhSaved, setWazuhSaved] = useState(false);
+
   useEffect(() => {
     setSettings(loadAnalysisSettings());
   }, []);
+
+  const loadWazuhConfig = useCallback(async () => {
+    try {
+      const [cfgRes, statusRes] = await Promise.all([wazuhAPI.getConfig(), wazuhAPI.getStatus()]);
+      setWazuhHost(cfgRes.data.host);
+      setWazuhPort(cfgRes.data.port);
+      setWazuhUser(cfgRes.data.username);
+      setWazuhSsl(cfgRes.data.verify_ssl);
+      setWazuhStatus(statusRes.data.available);
+    } catch {
+      setWazuhStatus(false);
+    }
+  }, []);
+
+  useEffect(() => { loadWazuhConfig(); }, [loadWazuhConfig]);
+
+  const saveWazuhConfig = async () => {
+    setWazuhSaving(true);
+    try {
+      await wazuhAPI.saveConfig({
+        host: wazuhHost,
+        port: wazuhPort,
+        username: wazuhUser,
+        ...(wazuhPass ? { password: wazuhPass } : {}),
+        verify_ssl: wazuhSsl,
+      });
+      const statusRes = await wazuhAPI.getStatus();
+      setWazuhStatus(statusRes.data.available);
+      setWazuhSaved(true);
+      setTimeout(() => setWazuhSaved(false), 2000);
+    } catch {
+      setWazuhStatus(false);
+    } finally {
+      setWazuhSaving(false);
+    }
+  };
 
   const handleSave = () => {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
@@ -109,6 +156,80 @@ export function SettingsPage() {
             Guardar Definições
           </button>
           {saved && <span className="text-green-400 text-sm">Guardado com sucesso</span>}
+        </div>
+      </div>
+
+      {/* Wazuh API Config */}
+      <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-white">Wazuh API</h3>
+          {wazuhStatus === true && (
+            <span className="flex items-center gap-1 text-green-400 text-sm"><Wifi className="w-4 h-4" /> Ligada</span>
+          )}
+          {wazuhStatus === false && (
+            <span className="flex items-center gap-1 text-red-400 text-sm"><WifiOff className="w-4 h-4" /> Indisponível</span>
+          )}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm text-gray-400 block mb-1">Host</label>
+            <input
+              type="text"
+              value={wazuhHost}
+              onChange={e => setWazuhHost(e.target.value)}
+              placeholder="localhost"
+              className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:border-cyan-600"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-400 block mb-1">Porta</label>
+            <input
+              type="number"
+              value={wazuhPort}
+              onChange={e => setWazuhPort(Number(e.target.value))}
+              className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:border-cyan-600"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-400 block mb-1">Utilizador</label>
+            <input
+              type="text"
+              value={wazuhUser}
+              onChange={e => setWazuhUser(e.target.value)}
+              className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:border-cyan-600"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-gray-400 block mb-1">Password</label>
+            <input
+              type="password"
+              value={wazuhPass}
+              onChange={e => setWazuhPass(e.target.value)}
+              placeholder="(deixar em branco para manter)"
+              className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:border-cyan-600"
+            />
+          </div>
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="verify-ssl"
+              checked={wazuhSsl}
+              onChange={e => setWazuhSsl(e.target.checked)}
+              className="w-4 h-4"
+            />
+            <label htmlFor="verify-ssl" className="text-sm text-gray-400">Verificar certificado SSL</label>
+          </div>
+        </div>
+        <div className="mt-4 flex items-center gap-3">
+          <button
+            onClick={saveWazuhConfig}
+            disabled={wazuhSaving}
+            className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 rounded-lg text-sm font-medium text-white transition-colors"
+          >
+            <Save className="w-4 h-4" />
+            {wazuhSaving ? 'A guardar...' : 'Guardar e testar ligação'}
+          </button>
+          {wazuhSaved && <span className="text-green-400 text-sm">Guardado — ligação testada</span>}
         </div>
       </div>
 

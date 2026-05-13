@@ -69,3 +69,85 @@ export interface AlertType {
   count: number;
   max_level: AlertLevel;
 }
+
+// ── Wazuh ────────────────────────────────────────────────────────────────────
+
+export interface WazuhStatus {
+  available: boolean;
+  url: string;
+  host: string;
+  port: number;
+}
+
+export interface WazuhConfig {
+  host: string;
+  port: number;
+  username: string;
+  verify_ssl: boolean;
+}
+
+export interface WazuhAgentOS {
+  name?: string;
+  platform?: string;
+  version?: string;
+  arch?: string;
+}
+
+export interface WazuhAgent {
+  id: string;
+  name: string;
+  ip?: string;
+  registerIP?: string;
+  status: 'active' | 'disconnected' | 'never_connected' | 'pending';
+  os?: WazuhAgentOS;
+  version?: string;
+  lastKeepAlive?: string;
+  manager?: string;
+  group?: string[];
+}
+
+export interface WazuhVulnerability {
+  cve: string;
+  name: string;
+  severity: 'Critical' | 'High' | 'Medium' | 'Low' | 'None';
+  version?: string;
+  architecture?: string;
+  type?: string;
+  published?: string;
+  updated?: string;
+  cvss3_score?: number;
+  cvss2_score?: number;
+}
+
+export interface WazuhVulnSummary {
+  critical: number;
+  high: number;
+  medium: number;
+  low: number;
+  total: number;
+}
+
+export interface WazuhSCAPolicy {
+  policy_id: string;
+  name: string;
+  description?: string;
+  references?: string;
+  pass: number;
+  fail: number;
+  invalid: number;
+  total_checks: number;
+  score: number;
+  hash_file?: string;
+  end_scan?: string;
+}
+
+export interface WazuhSCACheck {
+  id: number;
+  title: string;
+  description?: string;
+  rationale?: string;
+  remediation?: string;
+  result: 'passed' | 'failed' | 'not applicable';
+  condition?: string;
+  rules?: string[];
+}

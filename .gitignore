@@ -50,6 +50,9 @@ data/*.csv
 wazuh_events.jsonl
 logs.csv
 
+# Wazuh API credentials — never commit
+wazuh_api_config.json
+
 # Frontend
 frontend/node_modules/
 frontend/.env.local

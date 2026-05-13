@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import os
 
-from app.routers import system, analysis, events
+from app.routers import system, analysis, events, wazuh
 
 app = FastAPI(
     title='Security Analyzer API',
@@ -25,6 +25,7 @@ app.add_middleware(
 app.include_router(system.router, prefix='/api/system', tags=['System'])
 app.include_router(analysis.router, prefix='/api/analysis', tags=['Analysis'])
 app.include_router(events.router, prefix='/api/events', tags=['Events'])
+app.include_router(wazuh.router, prefix='/api/wazuh', tags=['Wazuh'])
 
 
 # Mount static files in production (if frontend build exists)

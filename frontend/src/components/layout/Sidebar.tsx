@@ -1,9 +1,10 @@
-import { BarChart3, AlertTriangle, Settings, BookOpen } from 'lucide-react';
+import { BarChart3, AlertTriangle, Settings, BookOpen, Shield } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const navItems = [
   { id: 'dashboard', label: 'Painel', icon: BarChart3, path: '/' },
   { id: 'alerts', label: 'Alertas', icon: AlertTriangle, path: '/alerts' },
+  { id: 'wazuh', label: 'Wazuh', icon: Shield, path: '/wazuh' },
   { id: 'settings', label: 'Definições', icon: Settings, path: '/settings' },
 ];
 
