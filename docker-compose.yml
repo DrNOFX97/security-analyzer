@@ -1,30 +1,26 @@
 services:
   wazuh-manager:
-    image: wazuh/wazuh-manager:latest
+    image: wazuh/wazuh-manager:4.9.2
     container_name: wazuh-manager
     ports:
       - "1514:1514"
       - "1515:1515"
-      - "514:514/udp"
       - "55000:55000"
     environment:
       - INDEXER_URL=https://wazuh-indexer:9200
       - INDEXER_USERNAME=admin
       - INDEXER_PASSWORD=SecretPassword
-      - FILEBEAT_SSL_VERIFICATION_MODE=full
-      - SSL_CERTIFICATE_AUTHORITIES=/etc/ssl/certs/ca-certificates.crt
-      - SSL_CERTIFICATE=/etc/ssl/certs/ssl-cert-snakeoil.pem
-      - SSL_KEY=/etc/ssl/private/ssl-cert-snakeoil.key
+      - FILEBEAT_SSL_VERIFICATION_MODE=none
     volumes:
       - wazuh_etc:/var/ossec/etc
       - wazuh_logs:/var/ossec/logs
     networks:
       - wazuh
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:55000/version"]
-      interval: 10s
+      test: ["CMD", "curl", "-sk", "https://localhost:55000/"]
+      interval: 15s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   wazuh-indexer:
     image: wazuh/wazuh-indexer:latest

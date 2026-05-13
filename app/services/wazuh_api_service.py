@@ -146,7 +146,7 @@ class WazuhAPIService:
     # ------------------------------------------------------------------
 
     def get_agents(self, status: Optional[str] = None) -> List[Dict]:
-        params = {'limit': 500, 'select': 'id,name,ip,status,os,version,lastKeepAlive,registerIP,manager,group'}
+        params: Dict[str, Any] = {'limit': 500}
         if status:
             params['status'] = status
         return self._items(self._get('/agents', params))
