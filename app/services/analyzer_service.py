@@ -163,7 +163,14 @@ class AnalyzerService:
                 if progress_callback:
                     progress_callback(stage='reading', channel='CSV File', pct=5)
                 import pandas as pd
-                df = pd.read_csv(csv_path)
+                # Resolve and confine csv_path to the project root
+                project_root = Path(__file__).parent.parent.parent.resolve()
+                resolved = (project_root / csv_path).resolve()
+                if not str(resolved).startswith(str(project_root)):
+                    raise ValueError(f'csv_path must be inside the project directory')
+                if not resolved.exists():
+                    raise FileNotFoundError(f'CSV file not found: {csv_path}')
+                df = pd.read_csv(resolved)
                 events = []
                 for _, row in df.iterrows():
                     event = Event(

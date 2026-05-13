@@ -13,8 +13,18 @@ from app.services import analyzer_service
 
 router = APIRouter()
 
-# In-memory job tracking
-_jobs = {}  # job_id -> {"events": [...], "complete": bool, "error": str}
+# In-memory job tracking — capped at 50 entries to prevent memory leak
+_jobs = {}
+_MAX_JOBS = 50
+
+
+def _evict_old_jobs():
+    """Remove oldest completed jobs when limit is reached."""
+    if len(_jobs) < _MAX_JOBS:
+        return
+    completed = [jid for jid, j in _jobs.items() if j.get('complete')]
+    for jid in completed[:len(completed) // 2 + 1]:
+        _jobs.pop(jid, None)
 
 
 def _create_progress_callback(job_id: str):
@@ -78,11 +88,14 @@ async def start_analysis(request: AnalysisRunRequest, background_tasks: Backgrou
             detail='Event Log reading requires Administrator privileges on Windows.'
         )
 
+    # Evict old jobs before adding new one
+    _evict_old_jobs()
+
     # Create job entry
     _jobs[job_id] = {'events': [], 'complete': False, 'error': None}
 
     # Schedule analysis in background (via executor to avoid blocking)
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     loop.run_in_executor(
         None,
         _run_analysis_sync,

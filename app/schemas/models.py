@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional, Dict, Any, List, Literal
 from datetime import datetime
 
@@ -53,6 +53,24 @@ class AnalysisRunRequest(BaseModel):
     source: Literal['csv', 'eventlog']
     csv_path: Optional[str] = 'logs.csv'
     hours: Optional[int] = 24
+
+    @field_validator('hours')
+    @classmethod
+    def hours_in_range(cls, v):
+        if v is not None and not (1 <= v <= 8760):
+            raise ValueError('hours must be between 1 and 8760 (1 year)')
+        return v
+
+    @field_validator('csv_path')
+    @classmethod
+    def csv_path_safe(cls, v):
+        if v is None:
+            return v
+        # Reject obvious path traversal attempts
+        normalized = v.replace('\\', '/').lower()
+        if '..' in normalized or normalized.startswith('/') or ':\\' in normalized[1:]:
+            raise ValueError('Invalid csv_path')
+        return v
 
 
 class AnalysisRunResponse(BaseModel):

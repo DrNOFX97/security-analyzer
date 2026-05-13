@@ -46,6 +46,10 @@ logs/*.log
 data/*.csv
 *.csv.bak
 
+# Runtime output — may contain sensitive security data
+wazuh_events.jsonl
+logs.csv
+
 # Frontend
 frontend/node_modules/
 frontend/.env.local

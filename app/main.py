@@ -15,10 +15,10 @@ app = FastAPI(
 # CORS middleware - allows frontend dev server to call API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://localhost:5173', 'http://localhost:3000'],  # Vite + fallback
-    allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
+    allow_origins=['http://localhost:5173', 'http://localhost:3000'],  # Vite dev server
+    allow_credentials=False,
+    allow_methods=['GET', 'POST'],
+    allow_headers=['Content-Type', 'Accept'],
 )
 
 # Register routers
